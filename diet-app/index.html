@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Anasayfa</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+  </head>
+
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="index.html">Diet App</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Anasayfa</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="body-mass-index.html">VKİ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="daily-water-tracking.html"
+                >Daily Water Tracking</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="weekly-meal-tracking.html"
+                >Weekly Meal Tracking</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="diet-list.html"
+                >Diet Lists Appropriate for Purpose</a
+              >
+            </li>
+          </ul>
+          <div class="d-flex">
+            <div id="pointsElement"></div>
+            <a class="btn btn-secondary mr-2" href="profile.html"> Profil </a>
+            <a class="btn btn-danger" id="logoutButton" href="#">Çıkış</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <div class="container mt-5">
+      <div class="row">
+        <div class="col-md-6">
+          <h3>Haftalık Su Tüketim Durumu</h3>
+          <canvas id="waterChart" width="400" height="200"></canvas>
+        </div>
+        <div class="col-md-6">
+          <h3>Haftalık Yemek Tüketim Durumu</h3>
+          <canvas id="kaloriChart" width="400" height="200"></canvas>
+        </div>
+      </div>
+    </div>    
+    
+    <div class="container mt-5">
+      <div id="loseWeightForm">
+        <h3>Kilo Verme Formu</h3>
+        <form id="loseWeightSubmitForm">
+          <div class="form-group">
+            <label for="verilenKilo">Bu Hafta Verilen Kilo Miktarı (kg):</label>
+            <input type="number" class="form-control" id="verilenKilo" name="verilenKilo" required>
+          </div>
+          <div class="form-group">
+            <label for="verilmeyeBaslamaTarihi">Kilonun Verilmeye Başlandığı Tarih:</label>
+            <input type="date" class="form-control" id="verilmeyeBaslamaTarihi" name="verilmeyeBaslamaTarihi" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Kaydet</button>
+        </form>
+      </div>
+      <div id="gainWeightForm">
+        <h3>Kilo Alma Formu</h3>
+        <form id="gainWeightSubmitForm">
+          <div class="form-group">
+            <label for="alinanKilo">Bu Hafta Alınan Kilo Miktarı (kg):</label>
+            <input type="number" class="form-control" id="alinanKilo" name="alinanKilo" required>
+          </div>
+          <div class="form-group">
+            <label for="almayaBaslamaTarihi">Kilonun Alınmaya Başlandığı Tarih:</label>
+            <input type="date" class="form-control" id="almayaBaslamaTarihi" name="almayaBaslamaTarihi" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Kaydet</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="container">
+      <canvas id="weightChart" width="400" height="200"></canvas>
+    </div>
+
+
+    <div
+    id="loadingSpinner"
+    class="justify-content-center align-items-center"
+    style="
+      display: flex;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.7);
+      z-index: 9999;
+    "
+  >
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="./assets/js/logout.js"></script>
+    <script src="./assets/js/dashboard.js"></script>
+    <script>
+      function redirectToIndex() {
+        window.location.href = "login.html";
+      }
+
+      if (!localStorage.getItem("dToken")) {
+        redirectToIndex();
+      }
+    </script>
+  </body>
+</html>

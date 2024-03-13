@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Quicksand:400,700"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="index.html">Diet App</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Anasayfa</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="body-mass-index.html">VKİ</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="daily-water-tracking.html"
+                >Daily Water Tracking</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="weekly-meal-tracking.html"
+                >Weekly Meal Tracking</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="diet-list.html"
+                >Diet Lists Appropriate for Purpose</a
+              >
+            </li>
+          </ul>
+          <div class="d-flex">
+            <a class="btn btn-secondary mr-2" href="profile.html">Profil</a>
+            <a class="btn btn-danger" id="logoutButton" href="#">Çıkış</a>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <div
+      class="container h-full d-flex justify-content-center align-items-center"
+    >
+      <div class="col-sm-12 col-lg-6 mx-auto">
+        <form class="form" id="form" onsubmit="return validateForm()">
+          <div class="form-group">
+            <label for="age">Age</label>
+            <input
+              type="text"
+              class="form-control"
+              id="age"
+              autocomplete="off"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="height">Height (cm)</label>
+            <input
+              type="text"
+              class="form-control"
+              id="height"
+              autocomplete="off"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="weight">Weight (kg)</label>
+            <input
+              type="text"
+              class="form-control"
+              id="weight"
+              autocomplete="off"
+              required
+            />
+          </div>
+          <div class="form-check">
+            <input
+              type="radio"
+              class="form-check-input"
+              name="gender"
+              id="female"
+            />
+            <label class="form-check-label" for="female">Female</label>
+          </div>
+          <div class="form-check">
+            <input
+              type="radio"
+              class="form-check-input"
+              name="gender"
+              id="male"
+            />
+            <label class="form-check-label" for="male">Male</label>
+          </div>
+          <button type="button" class="btn btn-primary" id="submit">
+            Submit
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="container">
+      <div id="result" class="col-sm-12 col-lg-6 mx-auto mt-4"></div>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXnALea6OT5u5F5F04me5tr5P"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <script src="./assets/js/logout.js"></script>
+    <script>
+      function redirectToIndex() {
+        window.location.href = "login.html";
+      }
+
+      if (!localStorage.getItem("dToken")) {
+        redirectToIndex();
+      }
+    </script>
+    <script>
+      var age = document.getElementById("age");
+      var height = document.getElementById("height");
+      var weight = document.getElementById("weight");
+      var male = document.getElementById("male");
+      var female = document.getElementById("female");
+      var form = document.getElementById("form");
+
+      function validateForm() {
+        if (
+          age.value == "" ||
+          height.value == "" ||
+          weight.value == "" ||
+          (male.checked == false && female.checked == false)
+        ) {
+          alert("All fields are required!");
+        } else {
+          countBmi();
+        }
+        return false;
+      }
+
+      document.getElementById("submit").addEventListener("click", validateForm);
+
+      function countBmi() {
+        var p = [age.value, height.value, weight.value];
+        if (male.checked) {
+          p.push("male");
+        } else if (female.checked) {
+          p.push("female");
+        }
+        form.reset();
+        var bmi = Number(p[2]) / (((Number(p[1]) / 100) * Number(p[1])) / 100);
+
+        var result = "";
+        if (bmi < 18.5) {
+          result = "Underweight";
+        } else if (18.5 <= bmi && bmi <= 24.9) {
+          result = "Healthy";
+        } else if (25 <= bmi && bmi <= 29.9) {
+          result = "Overweight";
+        } else if (30 <= bmi && bmi <= 34.9) {
+          result = "Obese";
+        } else if (35 <= bmi) {
+          result = "Extremely obese";
+        }
+
+        var resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = `<h2>BMI: ${bmi.toFixed(
+          2
+        )}</h2><h1>${result}</h1>`;
+      }
+    </script>
+  </body>
+</html>
